@@ -25,7 +25,8 @@ public: // メンバ関数
 	GameScene();
 
 public:
-	
+
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -57,16 +58,16 @@ private: // メンバ変数
 	// 3Dモデル
 	Model* model_ = nullptr;
 
+
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
-	//デバッグカメラ
-	DebugCamera* debugCamera_ = nullptr;
+	////デバッグカメラ
+	//DebugCamera* debugCamera_ = nullptr;
 	//カメラ上方向
 	float viewAngle = 0.0f;
+
 	//自キャラ
 	Player* player_ = nullptr;
-
-
 
 	Vector3 vector3(float x, float y, float z);
 	Vector4 vector4(int x, int y, int z, int w);

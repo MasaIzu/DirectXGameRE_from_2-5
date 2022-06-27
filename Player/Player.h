@@ -5,6 +5,8 @@
 #include "Input.h"
 #include "DebugText.h"
 #include "affin.h"
+#include "PlayerBullet.h"
+
 
 class Player {
 
@@ -29,6 +31,11 @@ public:
 	/// <summary>
 	void Draw(ViewProjection& viewProjection_);
 
+	///< summary>
+	///初期化
+	///</summary>
+	void Attack();
+
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
@@ -38,5 +45,8 @@ private:
 	uint32_t textureHandle_ = 0u;
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
+
+	//弾
+	PlayerBullet* bullet_ = nullptr;
 
 };

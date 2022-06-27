@@ -1,22 +1,15 @@
 ﻿#include "GameScene.h"
-#include "affin.h"
-#include "AxisIndicator.h"
-#include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include <cassert>
 #include <random>
 
-const float PI = 3.141592f;
 
-float RAD(float angle) {
-	return angle * (PI / 180);
-}
 
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
+	// delete sprite;
 	delete model_;
-	delete debugCamera_;
 	delete player_;
 }
 
@@ -27,40 +20,44 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
-	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
-	// 3Dモデルの生成
 	model_ = Model::Create();
+
+	//ビュープロジェクションの初期化
+	viewProjection_.Initialize();
 
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
-	player_->Initialize(model_,textureHandle_);
+	player_->Initialize(model_, textureHandle_);
 
-	//ビュープロジェクションの初期化
-	viewProjection_.Initialize();
-	//デバッグカメラの生成
-	debugCamera_ = new DebugCamera(1280, 720);
-	//軸方向表示の表示を有効にする
-	AxisIndicator::GetInstance()->SetVisible(true);
-	//軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
-	//ライン描画が参照するビュープロジェクションを指定する(アドレス渡し)
-	PrimitiveDrawer::GetInstance()->SetViewProjection(&debugCamera_->GetViewProjection());
 
-#pragma endregion
 }
 
 void GameScene::Update() {
-	debugCamera_->Update();
-
-	//行列の再計算
-	viewProjection_.UpdateMatrix();
-
+	//スプライトの今の座標を取得
+	// XMFLOAT2 position = sprite->GetPosition();
+	//座標を｛２，０｝移動
+	// position.x += 2.0f;
+	// position.y += 1.0f;
 
 	//自キャラの更新
 	player_->Update();
 
+	//行列の再計算
+	viewProjection_.UpdateMatrix();
+
+	//デバッグ用表示
+#pragma region debugText
+	debugText_->SetPos(50, 70);
+	debugText_->Printf(
+		"target:(%f,%f,%f)", viewProjection_.target.x, viewProjection_.target.y,
+		viewProjection_.target.z);
+
+	debugText_->SetPos(50, 90);
+	debugText_->Printf(
+		"up:(%f,%f,%f)", viewProjection_.up.x, viewProjection_.up.y, viewProjection_.up.z);
+#pragma endregion
 }
 
 void GameScene::Draw() {
@@ -89,7 +86,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	//自キャラの描画
+
 	player_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
@@ -111,7 +108,6 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
-
 }
 
 Vector3 GameScene::vector3(float x, float y, float z) { return Vector3(x, y, z); }
