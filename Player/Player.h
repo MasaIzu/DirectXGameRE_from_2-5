@@ -38,7 +38,7 @@ public:
 
 private:
 	//ワールド変換データ
-	WorldTransform worldTransform_;
+	WorldTransform worldTransforms_[50];
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル
