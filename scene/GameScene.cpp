@@ -31,7 +31,10 @@ void GameScene::Initialize() {
 	//自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
 
-
+	//敵キャラの生成
+	enemy_ = new Enemy();
+	//敵キャラの初期化
+	enemy_->Initialize(model_, textureHandle_);
 }
 
 void GameScene::Update() {
@@ -41,8 +44,11 @@ void GameScene::Update() {
 	// position.x += 2.0f;
 	// position.y += 1.0f;
 
-	//自キャラの更新
+	//敵キャラの更新
 	player_->Update();
+
+	//敵キャラの更新
+	enemy_->Update();
 
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
@@ -88,6 +94,8 @@ void GameScene::Draw() {
 	/// </summary>
 
 	player_->Draw(viewProjection_);
+
+	enemy_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
