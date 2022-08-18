@@ -18,7 +18,7 @@ Matrix4 AffinTrans::Scale(Vector3 scale) {
 
 	//スケーリング行列を宣言
 	Matrix4 matScale = {
-		scale.x, 0.0f, 0.0f,    0.0f,
+		scale.x, 0.0f, 0.0f,   0.0f,
 		0.0f, scale.y, 0.0f, 0.0f,
 		0.0f,    0.0f, scale.z, 0.0f,
 		0.0f, 0.0f,    0.0f, 1.0f
@@ -117,11 +117,18 @@ Matrix4 AffinTrans::Move(Vector3 Move) {
 	return move;
 }
 
+//Vector3 AffinTrans::DebugMove(Matrix4 Move) {
+//	Matrix4 move = Move;
+//
+//	return Vector3(move[][])
+//}
+
+
+
 void AffinTrans::affin(WorldTransform& affin) {
 	affin.matWorld_ = Initialize();
 	affin.matWorld_ *= Scale(affin.scale_);
 	affin.matWorld_ *= Rotation(affin.rotation_, 6);
 	affin.matWorld_ *= Move(affin.translation_);
-
 
 }

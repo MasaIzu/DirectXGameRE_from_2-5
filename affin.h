@@ -10,5 +10,6 @@ namespace AffinTrans {
 	Matrix4 Scale(Vector3 scale);
 	Matrix4 Rotation(Vector3 rotation, int X_1_Y_2_Z_3_XYZ_6);
 	Matrix4 Move(Vector3 move);
+	Vector3 DebugMove(Matrix4 Move);
 	void  affin(WorldTransform& affin);
 }; // namespace AffinTrans
