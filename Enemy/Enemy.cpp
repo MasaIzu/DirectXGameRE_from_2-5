@@ -72,7 +72,7 @@ void Enemy::Update() {
 
 }
 
-void Enemy::Draw(ViewProjection& viewProjection_) {
+void Enemy::Draw(ViewProjection viewProjection_) {
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 	//’eXV
@@ -138,6 +138,7 @@ void Enemy::Attack() {
 
 	Vector3 PlayerVec = player_->GetWorldPosition();
 	Vector3 EnemyVec = GetWorldPosition();
+
 	Vector3 A_BVec = Vector3(PlayerVec.x - EnemyVec.x, PlayerVec.y - EnemyVec.y, PlayerVec.z - EnemyVec.z);
 	float nomalize = sqrt(A_BVec.x * A_BVec.x + A_BVec.y * A_BVec.y + A_BVec.z * A_BVec.z) * 10;
 	A_BVec = Vector3(A_BVec.x / nomalize, A_BVec.y / nomalize, A_BVec.z / nomalize);

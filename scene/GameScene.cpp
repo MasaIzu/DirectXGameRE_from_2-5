@@ -11,6 +11,8 @@ GameScene::~GameScene() {
 	// delete sprite;
 	delete model_;
 	delete player_;
+	delete modelSkydome_;
+	delete debugCamera_;
 }
 
 void GameScene::Initialize() {
@@ -19,6 +21,8 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
+	//デバッグカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
 
 	textureHandle_ = TextureManager::Load("mario.jpg");
 	model_ = Model::Create();
@@ -37,14 +41,21 @@ void GameScene::Initialize() {
 	enemy_->Initialize(model_, textureHandle_);
 	//敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
+
+	//Skydome
+	skydome_ = new Skydome();
+	//3Dモデルの作成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	//skydomeの初期化
+	skydome_->Initialize(modelSkydome_);
+
+
 }
 
 void GameScene::Update() {
-	//スプライトの今の座標を取得
-	// XMFLOAT2 position = sprite->GetPosition();
-	//座標を｛２，０｝移動
-	// position.x += 2.0f;
-	// position.y += 1.0f;
+
+	debugCamera_->Update();
+
 
 	//敵キャラの更新
 	player_->Update();
@@ -52,6 +63,8 @@ void GameScene::Update() {
 	//敵キャラの更新
 	enemy_->Update();
 
+	//
+	
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
 
@@ -95,10 +108,12 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	
+	skydome_->Draw(debugCamera_->GetViewProjection());
 
-	player_->Draw(viewProjection_);
+	player_->Draw(debugCamera_->GetViewProjection());
 
-	enemy_->Draw(viewProjection_);
+	enemy_->Draw(debugCamera_->GetViewProjection());
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -111,6 +126,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
@@ -138,7 +154,7 @@ void GameScene::CheckAllCollisions(){
 	//自キャラと敵弾すべての当たり判定
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
 		//敵弾の座標
-		posB = bullet.get()->GetWorldPosition();
+		posB = bullet->GetWorldPosition();
 
 		float a = posB.x - posA.x;
 		float b = posB.y - posA.y;
@@ -164,7 +180,7 @@ void GameScene::CheckAllCollisions(){
 	//自キャラと敵弾すべての当たり判定
 	for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
 		//自弾の座標
-		posB = bullet.get()->GetWorldPosition();
+		posB = bullet->GetWorldPosition();
 
 		float a = posB.x - posA.x;
 		float b = posB.y - posA.y;
@@ -189,10 +205,10 @@ void GameScene::CheckAllCollisions(){
 		for (const std::unique_ptr<EnemyBullet>& bullet2 : enemyBullets) {
 
 			//自弾の座標
-			posA = bullet.get()->GetWorldPosition();
+			posA = bullet->GetWorldPosition();
 
 			//敵弾の座標
-			posB = bullet2.get()->GetWorldPosition();
+			posB = bullet2->GetWorldPosition();
 
 			float a = posB.x - posA.x;
 			float b = posB.y - posA.y;

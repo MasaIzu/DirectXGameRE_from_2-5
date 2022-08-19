@@ -15,40 +15,40 @@ class Enemy {
 public:
 	/// <summary>
 	/// 初期化
-	/// <summary>
+	/// </summary>
 	void Initialize(Model* model, uint32_t textureHandle);
 
 	/// <summary>
 	/// 更新
-	/// <summary>
+	/// </summary>
 	void Move();
 
 	/// <summary>
 	/// 更新
-	/// <summary>
+	/// </summary>
 	void Update();
 
 	/// <summary>
 	/// 描画
-	/// <summary>
-	void Draw(ViewProjection& viewProjection_);
+	/// </summary>
+	void Draw(ViewProjection viewProjection_);
 
 	void Attack();
 
 	/// <summary>
 	/// 接近
-	/// <summary>
+	/// </summary>
 	void ApproachInitialize();
 	void Approach();
 
 	/// <summary>
 	/// 離脱
-	/// <summary>
+	/// </summary>
 	void Leave();
 
 	/// <summary>
 	/// 衝突時に呼び出すコールバック関数
-	/// <summary>
+	/// </summary>
 	void OnCollision();
 
 	enum class Phase {

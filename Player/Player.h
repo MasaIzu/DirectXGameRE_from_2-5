@@ -31,7 +31,7 @@ public:
 	/// <summary>
 	/// ï`âÊ
 	/// <summary>
-	void Draw(ViewProjection& viewProjection_);
+	void Draw(ViewProjection viewProjection_);
 
 	/// <summary>
 	/// çUåÇ
