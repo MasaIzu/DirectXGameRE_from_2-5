@@ -61,6 +61,12 @@
     <Filter Include="ヘッダー ファイル\Enemy">
       <UniqueIdentifier>{c9cc2aba-5809-4b85-a53b-a07207370130}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Skydome">
+      <UniqueIdentifier>{3037a5bd-f5e9-43c1-8e10-15308f38edf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Skydome">
+      <UniqueIdentifier>{191654ce-fe7e-4b7d-ab9f-9ea5d80f2231}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="Enemy\EnemyBullet.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Skydome\Skydome.cpp">
+      <Filter>ソース ファイル\Skydome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="Enemy\EnemyBullet.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome\Skydome.h">
+      <Filter>ヘッダー ファイル\Skydome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

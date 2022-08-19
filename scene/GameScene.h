@@ -13,6 +13,7 @@
 #include "affin.h"
 #include <Player/Player.h>
 #include <Enemy/Enemy.h>
+#include "Skydome/Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -58,6 +59,7 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 	DebugText* debugText_ = nullptr;
+	DebugCamera* debugCamera_ = nullptr;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
@@ -80,6 +82,10 @@ private: // メンバ変数
 	Enemy* enemy_ = nullptr;
 	int enemyRadius = 1;
 	int enemyBulletRadius = 1;
+
+	//Skydome
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 	Vector3 vector3(float x, float y, float z);
 	Vector4 vector4(int x, int y, int z, int w);
