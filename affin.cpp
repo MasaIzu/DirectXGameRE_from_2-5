@@ -130,5 +130,32 @@ void AffinTrans::affin(WorldTransform& affin) {
 	affin.matWorld_ *= Scale(affin.scale_);
 	affin.matWorld_ *= Rotation(affin.rotation_, 6);
 	affin.matWorld_ *= Move(affin.translation_);
+}
 
+//Vector3 AffinTrans::Vec3Scale(Vector3& scale){
+//
+//	////Šg‘å‚¢‚¢‚¢‚¢‚¢‚¢‚¢‚¢‚¢‚¢
+//	//for (int i = 0; i < 8; i++) {
+//	//	vector3Scale[i].x = scale[0].x * vector3[i].x + scale[0].y * vector3[i].y +
+//	//		scale[0].z * vector3[i].z + 0 * scale[0].w;
+//	//	vector3Scale[i].y = scale[1].x * vector3[i].x + scale[1].y * vector3[i].y +
+//	//		scale[1].z * vector3[i].z + 0 * scale[0].w;
+//	//	vector3Scale[i].z = scale[2].x * vector3[i].x + scale[2].y * vector3[i].y +
+//	//		scale[2].z * vector3[i].z + 0 * scale[0].w;
+//	//}
+//
+//
+//	Vector3 vecScale = 
+//
+//	return vecScale;
+//}
+
+Vector3 AffinTrans::Vec3Rotation(Vector3& scale){
+
+	return Vector3();
+}
+
+Vector3 AffinTrans::Vec3Move(Vector3& scale){
+
+	return Vector3();
 }

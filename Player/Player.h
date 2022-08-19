@@ -39,6 +39,7 @@ public:
 	void Attack();
 
 	Vector3 bVelocity(Vector3& velocity, WorldTransform& worldTransform);
+	Vector3 GetWorldPosition();
 
 private:
 	//ワールド変換データ

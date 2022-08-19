@@ -1,4 +1,6 @@
 #include"Enemy.h"
+#include"Player/Player.h"
+#include <cmath>
 
 void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 	//NULLポインタチェック
@@ -57,12 +59,11 @@ void Enemy::Move() {
 		bullet->Update();
 	}
 
-	debugText_->SetPos(50, 180);
+	debugText_->SetPos(400, 20);
 	debugText_->Printf(
-		"translation : %f,%f,%f", worldTransform_.translation_.x,
+		"PlayerVec : %f,%f,%f", worldTransform_.translation_.x,
 		worldTransform_.translation_.y,
 		worldTransform_.translation_.z);
-
 }
 
 void Enemy::Update() {
@@ -107,6 +108,13 @@ void Enemy::Approach() {
 
 void Enemy::Leave() {
 	BulletClean();
+	//発射タイマーカウントダウン
+	BulletTimer--;
+	//時間に達したら
+	if (BulletTimer <= 0) {
+		Fire();				//弾を発射
+		BulletTimer = 60;	//発射タイマーを初期化
+	}
 	//移動(ベクトルを加算)
 	worldTransform_.translation_ += Vector3(0, 0, +kEnemyPhaseCharacterSpeed);
 	//既定の位置に到達したら離脱
@@ -124,14 +132,26 @@ void Enemy::Attack() {
 	//速度ベクトルを自機の向きに合わせて回転させる
 	velocity = bVelocity(velocity, worldTransform_);
 
+	Vector3 PlayerVec = player_->GetWorldPosition();
+	Vector3 EnemyVec = GetWorldPosition();
+	Vector3 A_BVec = Vector3(PlayerVec.x - EnemyVec.x, PlayerVec.y - EnemyVec.y, PlayerVec.z - EnemyVec.z);
+	float nomalize = sqrt(A_BVec.x * A_BVec.x + A_BVec.y * A_BVec.y + A_BVec.z * A_BVec.z) * 10;
+	A_BVec = Vector3(A_BVec.x / nomalize, A_BVec.y / nomalize, A_BVec.z / nomalize);
+
 
 	//弾を生成し初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+	newBullet->Initialize(model_, worldTransform_.translation_, A_BVec);
 
 	//弾の登録
 	bullets_.push_back(std::move(newBullet));
 
+	debugText_->SetPos(400, 20);
+	debugText_->Printf(
+		"PlayerVec : %f,%f,%f", PlayerVec.x,
+		PlayerVec.y,
+		PlayerVec.z);
+	
 }
 
 Vector3 Enemy::bVelocity(Vector3& velocity, WorldTransform& worldTransform) {
@@ -165,4 +185,15 @@ void Enemy::BulletClean() {
 	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
 		return bullet->IsDead();
 	});
+}
+
+Vector3 Enemy::GetWorldPosition(){
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+	//ワールド行列移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
 }
