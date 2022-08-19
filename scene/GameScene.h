@@ -48,6 +48,11 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 衝突判定と応答
+	/// </summary>
+	void CheckAllCollisions();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -69,9 +74,12 @@ private: // メンバ変数
 
 	//自キャラ
 	Player* player_ = nullptr;
-
+	int playerRadius = 1;
+	int playerBulletRadius = 1;
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
+	int enemyRadius = 1;
+	int enemyBulletRadius = 1;
 
 	Vector3 vector3(float x, float y, float z);
 	Vector4 vector4(int x, int y, int z, int w);

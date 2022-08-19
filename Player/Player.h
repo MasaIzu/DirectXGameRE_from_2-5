@@ -33,13 +33,21 @@ public:
 	/// <summary>
 	void Draw(ViewProjection& viewProjection_);
 
-	///< summary>
-	///初期化
-	///</summary>
+	/// <summary>
+	/// 攻撃
+	/// <summary>
 	void Attack();
+
+	/// <summary>
+	/// 衝突時に呼び出すコールバック関数
+	/// <summary>
+	void OnCollision();
 
 	Vector3 bVelocity(Vector3& velocity, WorldTransform& worldTransform);
 	Vector3 GetWorldPosition();
+
+	//弾リストを取得
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
 private:
 	//ワールド変換データ
