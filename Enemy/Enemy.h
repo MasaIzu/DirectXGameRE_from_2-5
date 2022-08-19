@@ -5,12 +5,9 @@
 #include "Input.h"
 #include "DebugText.h"
 #include "affin.h"
-#include "PlayerBullet.h"
-#include "memory"
-#include <list>
+#include "EnemyBullet.h"
 
-
-class Player {
+class Enemy {
 
 public:
 	/// <summary>
@@ -33,12 +30,31 @@ public:
 	/// <summary>
 	void Draw(ViewProjection& viewProjection_);
 
-	///< summary>
-	///初期化
-	///</summary>
 	void Attack();
 
+	/// <summary>
+	/// 接近
+	/// <summary>
+	void ApproachInitialize();
+	void Approach();
+
+	/// <summary>
+	/// 離脱
+	/// <summary>
+	void Leave();
+
+	enum class Phase {
+		Approach,//接近する
+		Leave,//離脱する
+	};
+
 	Vector3 bVelocity(Vector3& velocity, WorldTransform& worldTransform);
+
+	void Fire();
+	void BulletClean();
+
+	//発射間隔
+	static const int kFireInterval = 60;
 
 private:
 	//ワールド変換データ
@@ -50,9 +66,20 @@ private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
 
+	//フラグ
+	int back = 0;
+	//キャラクターの移動の速さ
+	const float kEnemyCharacterSpeed = 0.05f;
+	//キャラクターの移動ベクトル
+	Vector3 move = { kEnemyCharacterSpeed, 0, 0 };
+
+	//フェーズ
+	Phase phase_ = Phase::Approach;
+	//キャラクターのフェーズ移動の速さ
+	const float kEnemyPhaseCharacterSpeed = 0.01f;
+
 	//弾
-	std::list<std::unique_ptr<PlayerBullet>>bullets_;
+	std::list<std::unique_ptr<EnemyBullet>>bullets_;
 
-
-
+	int BulletTimer = 0;
 };

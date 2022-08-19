@@ -5,12 +5,8 @@
 #include "Input.h"
 #include "DebugText.h"
 #include "affin.h"
-#include "PlayerBullet.h"
-#include "memory"
-#include <list>
 
-
-class Player {
+class Enemy {
 
 public:
 	/// <summary>
@@ -33,13 +29,6 @@ public:
 	/// <summary>
 	void Draw(ViewProjection& viewProjection_);
 
-	///< summary>
-	///初期化
-	///</summary>
-	void Attack();
-
-	Vector3 bVelocity(Vector3& velocity, WorldTransform& worldTransform);
-
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
@@ -50,9 +39,11 @@ private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
 
-	//弾
-	std::list<std::unique_ptr<PlayerBullet>>bullets_;
-
-
+	//フラグ
+	int back = 0;
+	//キャラクターの移動の速さ
+	const float kEnemyCharacterSpeed = 0.2f;
+	//キャラクターの移動ベクトル
+	Vector3 move = { kEnemyCharacterSpeed, 0, 0 };
 
 };
