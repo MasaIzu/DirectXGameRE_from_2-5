@@ -7,6 +7,9 @@
 #include "affin.h"
 #include "EnemyBullet.h"
 
+//自機クラスの前方宣言
+class Player;
+
 class Enemy {
 
 public:
@@ -56,6 +59,11 @@ public:
 	//発射間隔
 	static const int kFireInterval = 60;
 
+	void  SetPlayer(Player* player) { player_ = player; }
+
+	//ワールド座標を取得
+	Vector3 GetWorldPosition();
+
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
@@ -65,6 +73,9 @@ private:
 	uint32_t textureHandle_ = 0u;
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
+
+	//自キャラ
+	Player* player_ = nullptr;
 
 	//フラグ
 	int back = 0;

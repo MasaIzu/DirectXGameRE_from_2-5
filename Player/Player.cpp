@@ -45,7 +45,6 @@ void Player::Move() {
 
 	//行列更新
 	AffinTrans::affin(worldTransform_);
-
 	worldTransform_.TransferMatrix();
 
 	const float kMoveLimitX = 35;
@@ -136,4 +135,16 @@ Vector3 Player::bVelocity(Vector3& velocity, WorldTransform& worldTransform) {
 
 
 	return result;
+}
+
+Vector3 Player::GetWorldPosition(){
+
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+	//ワールド行列移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
 }
