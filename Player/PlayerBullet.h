@@ -1,30 +1,37 @@
 #pragma once
+#include "Model.h"
 #include "math/Vector3.h"
 #include <Model.h>
 #include "ViewProjection.h"
 #include <WorldTransform.h>
 #include <cassert>
-#include <affin.h>
+#include "affin.h"
 
 class PlayerBullet {
 public:
-	///< summary>
+	/// <summary>
 	///初期化
-	///</summary>
+	/// <summary>
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
 
-	///< summary>
-	///初期化
-	///</summary>
+	/// <summary>
+	/// 更新処理
+	/// <summary>
 	void Update();
 
-	///< summary>
-	///初期化
-	///</summary>
+	/// <summary>
+	/// 描画処理
+	/// <summary>
 	void Draw(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// 衝突時に呼び出すコールバック関数
+	/// <summary>
+	void OnCollision();
 
 	bool IsDead() const { return isDead_; }
 
+	Vector3 GetWorldPosition();
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;

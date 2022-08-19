@@ -46,6 +46,11 @@ public:
 	/// <summary>
 	void Leave();
 
+	/// <summary>
+	/// 衝突時に呼び出すコールバック関数
+	/// <summary>
+	void OnCollision();
+
 	enum class Phase {
 		Approach,//接近する
 		Leave,//離脱する
@@ -64,6 +69,9 @@ public:
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	//弾リストを取得
+	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
+
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
@@ -80,14 +88,14 @@ private:
 	//フラグ
 	int back = 0;
 	//キャラクターの移動の速さ
-	const float kEnemyCharacterSpeed = 0.05f;
+	const float kEnemyCharacterSpeed = 0.0f;
 	//キャラクターの移動ベクトル
 	Vector3 move = { kEnemyCharacterSpeed, 0, 0 };
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;
 	//キャラクターのフェーズ移動の速さ
-	const float kEnemyPhaseCharacterSpeed = 0.01f;
+	const float kEnemyPhaseCharacterSpeed = 0.0f;
 
 	//弾
 	std::list<std::unique_ptr<EnemyBullet>>bullets_;

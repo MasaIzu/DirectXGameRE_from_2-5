@@ -20,7 +20,7 @@ void Player::Move() {
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 	//キャラクターの移動の速さ
-	const float kCharacterSpeed = 0.2f;
+	const float kCharacterSpeed = 0.1f;
 
 	//デスフラグの立った弾を削除
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
@@ -114,7 +114,10 @@ void Player::Attack() {
 		//弾の登録
 		bullets_.push_back(std::move(newBullet));
 	}
+}
 
+void Player::OnCollision(){
+	
 }
 
 Vector3 Player::bVelocity(Vector3& velocity, WorldTransform& worldTransform) {
@@ -142,9 +145,9 @@ Vector3 Player::GetWorldPosition(){
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
 	//ワールド行列移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }

@@ -15,7 +15,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_ += Vector3(0, 0, 10);
+	worldTransform_.translation_ += Vector3(10, 0, 30);
 
 	//行列更新
 	AffinTrans::affin(worldTransform_);
@@ -123,6 +123,10 @@ void Enemy::Leave() {
 	}
 }
 
+void Enemy::OnCollision(){
+
+}
+
 void Enemy::Attack() {
 
 	//弾の速度
@@ -191,9 +195,9 @@ Vector3 Enemy::GetWorldPosition(){
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
 	//ワールド行列移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }

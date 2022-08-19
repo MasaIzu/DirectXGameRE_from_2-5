@@ -16,7 +16,14 @@ public:
 
 	void Draw(const ViewProjection& viewProjection);
 
+	/// <summary>
+	/// 衝突時に呼び出すコールバック関数
+	/// <summary>
+	void OnCollision();
+
 	bool IsDead() const { return isDead_; }
+
+	Vector3 GetWorldPosition();
 private:
 
 	//ワールド変換データ
