@@ -98,6 +98,7 @@
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\TextureManager.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="Camera\RailCamera.cpp" />
     <ClCompile Include="Enemy\Enemy.cpp" />
     <ClCompile Include="Enemy\EnemyBullet.cpp" />
     <ClCompile Include="main.cpp" />
@@ -105,6 +106,7 @@
     <ClCompile Include="Player\PlayerBullet.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Skydome\Skydome.cpp" />
+    <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
@@ -128,6 +130,7 @@
     <ClInclude Include="base\SafeDelete.h" />
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="Camera\RailCamera.h" />
     <ClInclude Include="Enemy\Enemy.h" />
     <ClInclude Include="Enemy\EnemyBullet.h" />
     <ClInclude Include="input\Input.h" />

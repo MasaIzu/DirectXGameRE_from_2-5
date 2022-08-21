@@ -1,6 +1,7 @@
 #include"Enemy.h"
 #include"Player/Player.h"
 #include <cmath>
+#include"GameScene.h"
 
 void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 	//NULLポインタチェック
@@ -75,10 +76,6 @@ void Enemy::Update() {
 void Enemy::Draw(ViewProjection viewProjection_) {
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
-	//弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
-		bullet->Draw(viewProjection_);
-	}
 }
 
 void Enemy::ApproachInitialize() {
@@ -94,7 +91,7 @@ void Enemy::Approach() {
 	BulletTimer--;
 	//時間に達したら
 	if (BulletTimer <= 0) {
-		Fire();				//弾を発射
+		Attack();				//弾を発射
 		BulletTimer = 60;	//発射タイマーを初期化
 	}
 
@@ -112,7 +109,7 @@ void Enemy::Leave() {
 	BulletTimer--;
 	//時間に達したら
 	if (BulletTimer <= 0) {
-		Fire();				//弾を発射
+		Attack();				//弾を発射
 		BulletTimer = 60;	//発射タイマーを初期化
 	}
 	//移動(ベクトルを加算)
@@ -179,11 +176,6 @@ Vector3 Enemy::bVelocity(Vector3& velocity, WorldTransform& worldTransform) {
 	return result;
 }
 
-void Enemy::Fire() {
-
-	Attack();
-
-}
 
 void Enemy::BulletClean() {
 	//デスフラグが立った弾を削除

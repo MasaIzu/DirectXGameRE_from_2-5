@@ -14,6 +14,7 @@
 #include <Player/Player.h>
 #include <Enemy/Enemy.h>
 #include "Skydome/Skydome.h"
+#include "Camera/RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -21,9 +22,9 @@
 class GameScene {
 
 public: // メンバ関数
-		/// <summary>
-		/// コンストクラタ
-		/// </summary>
+	/// <summary>
+	/// コンストクラタ
+	/// </summary>
 	GameScene();
 
 public:
@@ -54,6 +55,13 @@ public:
 	/// </summary>
 	void CheckAllCollisions();
 
+	/// <summary>
+	/// 敵弾を追加
+	/// </summary>
+	/// <param name = "enemyBullet">敵弾</param>
+	void AddEnemyBulet(std::unique_ptr<EnemyBullet>enemyBullet);
+
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -77,18 +85,18 @@ private: // メンバ変数
 	//自キャラ
 	Player* player_ = nullptr;
 	int playerRadius = 1;
+	//自弾
 	int playerBulletRadius = 1;
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
 	int enemyRadius = 1;
+	//敵弾
 	int enemyBulletRadius = 1;
-
 	//Skydome
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
-
-	Vector3 vector3(float x, float y, float z);
-	Vector4 vector4(int x, int y, int z, int w);
+	//レールカメラ
+	RailCamera* railCamera_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

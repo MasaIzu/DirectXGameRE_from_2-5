@@ -10,6 +10,9 @@
 //自機クラスの前方宣言
 class Player;
 
+//GameSceneの前方宣言(苦肉の策)
+class GameScene;
+
 class Enemy {
 
 public:
@@ -58,7 +61,6 @@ public:
 
 	Vector3 bVelocity(Vector3& velocity, WorldTransform& worldTransform);
 
-	void Fire();
 	void BulletClean();
 
 	//発射間隔
@@ -68,6 +70,9 @@ public:
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
+
+	//ゲームシーンSetter
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
@@ -81,7 +86,9 @@ private:
 	uint32_t textureHandle_ = 0u;
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
-
+	//ゲームシーン
+	GameScene* gameScene_ = nullptr;
+	
 	//自キャラ
 	Player* player_ = nullptr;
 
@@ -96,7 +103,8 @@ private:
 	Phase phase_ = Phase::Approach;
 	//キャラクターのフェーズ移動の速さ
 	const float kEnemyPhaseCharacterSpeed = 0.0f;
-
+	//弾
+	std::list<std::unique_ptr<EnemyBullet>>enemyBullets_;
 	//弾
 	std::list<std::unique_ptr<EnemyBullet>>bullets_;
 

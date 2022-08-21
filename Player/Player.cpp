@@ -1,5 +1,5 @@
 #include "Player.h"
-
+using namespace MathUtility;
 
 void Player::Initialize(Model* model, uint32_t textureHandle) {
 	//NULLポインタチェック
@@ -13,6 +13,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
+	worldTransform_.translation_ = { 0,0,20 };
 }
 
 void Player::Move() {
@@ -43,10 +44,6 @@ void Player::Move() {
 
 	worldTransform_.translation_ += move;
 
-	//行列更新
-	AffinTrans::affin(worldTransform_);
-	worldTransform_.TransferMatrix();
-
 	const float kMoveLimitX = 35;
 	const float kMoveLimitY = 18;
 
@@ -66,6 +63,19 @@ void Player::Move() {
 		worldTransform_.rotation_.y += kChestRotSpeed;
 	}
 
+	//行列更新
+	AffinTrans::affin(worldTransform_);
+
+	worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
+
+	worldTransform_.TransferMatrix();
+
+	debugText_->SetPos(100, 20);
+	debugText_->Printf(
+		"PlayerVec : %f,%f,%f", worldTransform_.translation_.x,
+		worldTransform_.translation_.y,
+		worldTransform_.translation_.z);
+
 	//弾発射処理
 	Attack();
 
@@ -73,19 +83,12 @@ void Player::Move() {
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
 	}
-
-	debugText_->SetPos(50, 150);
-	debugText_->Printf(
-		"translation : %f,%f,%f", worldTransform_.translation_.x,
-		worldTransform_.translation_.y,
-		worldTransform_.translation_.z);
-
 }
 
 void Player::Update(){
 
 	Move();
-
+	
 }
 
 void Player::Draw(ViewProjection viewProjection_) {
@@ -106,10 +109,10 @@ void Player::Attack() {
 		//速度ベクトルを自機の向きに合わせて回転させる
 		velocity = bVelocity(velocity, worldTransform_);
 
-
+		Vector3 worldVec = AffinTrans::GetWorldTransform(worldTransform_.matWorld_);
 		//弾を生成し初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+		newBullet->Initialize(model_, worldVec, velocity);
 
 		//弾の登録
 		bullets_.push_back(std::move(newBullet));
@@ -120,9 +123,10 @@ void Player::OnCollision(){
 	
 }
 
-Vector3 Player::bVelocity(Vector3& velocity, WorldTransform& worldTransform) {
+Vector3 Player::bVelocity(Vector3 velocity, WorldTransform& worldTransform) {
 
 	Vector3 result = { 0, 0, 0 };
+
 
 	result.x = velocity.x * worldTransform.matWorld_.m[0][0] +
 		velocity.y * worldTransform.matWorld_.m[1][0] +
@@ -135,7 +139,6 @@ Vector3 Player::bVelocity(Vector3& velocity, WorldTransform& worldTransform) {
 	result.z = velocity.x * worldTransform.matWorld_.m[0][2] +
 		velocity.y * worldTransform.matWorld_.m[1][2] +
 		velocity.z * worldTransform.matWorld_.m[2][2];
-
 
 	return result;
 }
@@ -150,4 +153,10 @@ Vector3 Player::GetWorldPosition(){
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+void Player::viewSet(WorldTransform* worldTransform){
+	
+	worldTransform_.parent_ = worldTransform;
+
 }

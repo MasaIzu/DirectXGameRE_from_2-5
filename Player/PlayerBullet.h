@@ -31,6 +31,8 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	void worldSet(WorldTransform* worldTransform);
+
 	Vector3 GetWorldPosition();
 private:
 	//ワールド変換データ

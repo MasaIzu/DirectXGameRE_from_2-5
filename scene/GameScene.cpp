@@ -49,6 +49,11 @@ void GameScene::Initialize() {
 	//skydomeの初期化
 	skydome_->Initialize(modelSkydome_);
 
+	//レールカメラ
+	railCamera_ = new RailCamera();
+	//レールカメラの初期化
+	railCamera_->Initialize(Vector3(0,0,-50), Vector3(0, 0, 0));
+
 
 }
 
@@ -56,29 +61,33 @@ void GameScene::Update() {
 
 	debugCamera_->Update();
 
-
-	//敵キャラの更新
-	player_->Update();
-
-	//敵キャラの更新
-	enemy_->Update();
-
-	//
-	
+	//レールカメラ
+	railCamera_->Update();
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
+
+	//敵キャラの更新
+	player_->viewSet(railCamera_->GetworldTransform());
+	player_->Update();
+
+
+
+	//敵キャラの更新
+	enemy_->SetGameScene(this);
+	enemy_->Update();
+
 
 	CheckAllCollisions();
 	//デバッグ用表示
 #pragma region debugText
-	debugText_->SetPos(50, 70);
+	/*debugText_->SetPos(50, 70);
 	debugText_->Printf(
 		"target:(%f,%f,%f)", viewProjection_.target.x, viewProjection_.target.y,
 		viewProjection_.target.z);
 
 	debugText_->SetPos(50, 90);
 	debugText_->Printf(
-		"up:(%f,%f,%f)", viewProjection_.up.x, viewProjection_.up.y, viewProjection_.up.z);
+		"up:(%f,%f,%f)", viewProjection_.up.x, viewProjection_.up.y, viewProjection_.up.z);*/
 #pragma endregion
 }
 
@@ -109,11 +118,12 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	
-	skydome_->Draw(debugCamera_->GetViewProjection());
+	skydome_->Draw(railCamera_->GetViewProjection());
 
-	player_->Draw(debugCamera_->GetViewProjection());
+	player_->Draw(railCamera_->GetViewProjection());
 
-	enemy_->Draw(debugCamera_->GetViewProjection());
+	enemy_->Draw(railCamera_->GetViewProjection());
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -227,7 +237,9 @@ void GameScene::CheckAllCollisions(){
 
 #pragma endregion
 }
-
-Vector3 GameScene::vector3(float x, float y, float z) { return Vector3(x, y, z); }
-
-Vector4 GameScene::vector4(int x, int y, int z, int w) { return Vector4(x, y, z, w); }
+//
+//void GameScene::AddEnemyBulet(std::unique_ptr<EnemyBullet> enemyBullet){
+//	//リストに登録する
+//	enemyBullets_.push_back(std::move(enemyBullet));
+//
+//}

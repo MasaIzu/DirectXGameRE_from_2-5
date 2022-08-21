@@ -43,8 +43,10 @@ public:
 	/// <summary>
 	void OnCollision();
 
-	Vector3 bVelocity(Vector3& velocity, WorldTransform& worldTransform);
+	Vector3 bVelocity(Vector3 velocity, WorldTransform& worldTransform);
 	Vector3 GetWorldPosition();
+
+	void viewSet(WorldTransform* worldTransform);
 
 	//’eƒŠƒXƒg‚ðŽæ“¾
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
