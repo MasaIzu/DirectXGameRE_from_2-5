@@ -7,7 +7,7 @@ void Skydome::Initialize(Model* model){
 	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
 	worldTransform_.Initialize();
 
-	worldTransform_.scale_ = Vector3(100, 100, 100);
+	worldTransform_.scale_ = Vector3(200, 200, 200);
 	worldTransform_.matWorld_ *=AffinTrans::Scale(worldTransform_.scale_);
 	//s—ñ‚Ì“]‘—
 	worldTransform_.TransferMatrix();

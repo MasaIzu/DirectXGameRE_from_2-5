@@ -1,9 +1,9 @@
 #include"Enemy.h"
 #include"Player/Player.h"
 #include <cmath>
-#include"GameScene.h"
+#include <GameScene.h>
 
-void Enemy::Initialize(Model* model, uint32_t textureHandle) {
+void Enemy::Initialize(Model* model, uint32_t textureHandle, Vector3 vector3) {
 	//NULLポインタチェック
 	assert(model);
 	model_ = model;
@@ -16,7 +16,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_ += Vector3(10, 0, 30);
+	worldTransform_.translation_ = vector3;
 
 	//行列更新
 	AffinTrans::affin(worldTransform_);
@@ -55,10 +55,6 @@ void Enemy::Move() {
 		break;
 	}
 
-	//弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
-		bullet->Update();
-	}
 
 	debugText_->SetPos(400, 20);
 	debugText_->Printf(
@@ -69,6 +65,7 @@ void Enemy::Move() {
 
 void Enemy::Update() {
 
+	
 	Move();
 
 }
@@ -86,7 +83,6 @@ void Enemy::ApproachInitialize() {
 }
 
 void Enemy::Approach() {
-	BulletClean();
 	//発射タイマーカウントダウン
 	BulletTimer--;
 	//時間に達したら
@@ -104,7 +100,6 @@ void Enemy::Approach() {
 }
 
 void Enemy::Leave() {
-	BulletClean();
 	//発射タイマーカウントダウン
 	BulletTimer--;
 	//時間に達したら
@@ -121,7 +116,7 @@ void Enemy::Leave() {
 }
 
 void Enemy::OnCollision(){
-
+	isDead_ = true;
 }
 
 void Enemy::Attack() {
@@ -141,12 +136,14 @@ void Enemy::Attack() {
 	A_BVec = Vector3(A_BVec.x / nomalize, A_BVec.y / nomalize, A_BVec.z / nomalize);
 
 
-	//弾を生成し初期化
+	// 弾を生成し、初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
 	newBullet->Initialize(model_, worldTransform_.translation_, A_BVec);
 
-	//弾の登録
-	bullets_.push_back(std::move(newBullet));
+	//弾を登録する
+	gameScene_->AddEnemyBullet(newBullet);
+	////リストに登録する
+	//enemyBullets_.push_back(std::move(enemyBullet));
 
 	debugText_->SetPos(400, 20);
 	debugText_->Printf(
@@ -176,13 +173,6 @@ Vector3 Enemy::bVelocity(Vector3& velocity, WorldTransform& worldTransform) {
 	return result;
 }
 
-
-void Enemy::BulletClean() {
-	//デスフラグが立った弾を削除
-	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
-		return bullet->IsDead();
-	});
-}
 
 Vector3 Enemy::GetWorldPosition(){
 	//ワールド座標を入れる変数

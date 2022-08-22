@@ -19,7 +19,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, Vector3 vector3);
 
 	/// <summary>
 	/// 更新
@@ -54,6 +54,8 @@ public:
 	/// </summary>
 	void OnCollision();
 
+	bool IsDead() const { return isDead_; }
+
 	enum class Phase {
 		Approach,//接近する
 		Leave,//離脱する
@@ -61,7 +63,6 @@ public:
 
 	Vector3 bVelocity(Vector3& velocity, WorldTransform& worldTransform);
 
-	void BulletClean();
 
 	//発射間隔
 	static const int kFireInterval = 60;
@@ -74,10 +75,9 @@ public:
 	//ゲームシーンSetter
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
-	//弾リストを取得
-	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 
 private:
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
@@ -103,10 +103,9 @@ private:
 	Phase phase_ = Phase::Approach;
 	//キャラクターのフェーズ移動の速さ
 	const float kEnemyPhaseCharacterSpeed = 0.0f;
-	//弾
-	std::list<std::unique_ptr<EnemyBullet>>enemyBullets_;
-	//弾
-	std::list<std::unique_ptr<EnemyBullet>>bullets_;
+	
+	//デスフラグ
+	bool isDead_ = false;
 
 	int BulletTimer = 0;
 };

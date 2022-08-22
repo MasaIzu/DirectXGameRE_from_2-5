@@ -15,6 +15,8 @@
 #include <Enemy/Enemy.h>
 #include "Skydome/Skydome.h"
 #include "Camera/RailCamera.h"
+#include <sstream>
+
 
 /// <summary>
 /// ゲームシーン
@@ -59,8 +61,25 @@ public:
 	/// 敵弾を追加
 	/// </summary>
 	/// <param name = "enemyBullet">敵弾</param>
-	void AddEnemyBulet(std::unique_ptr<EnemyBullet>enemyBullet);
+	void AddEnemyBullet(std::unique_ptr<EnemyBullet>& enemyBullet);
 
+	/// <summary>
+	/// 敵発生データの読み込み
+	/// </summary>
+	void LoadEnemyPopData();
+
+	/// <summary>
+	/// 敵発生コマンドの更新
+	/// </summary>
+	void UpdateEnemyPopCommands();
+
+	/// <summary>
+	/// 敵発生関数
+	/// </summary>
+	void MakeEnemy(Vector3 EnemyPos);
+
+	//弾リストを取得
+	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return enemyBullets_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -73,7 +92,6 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0;
 	// 3Dモデル
 	Model* model_ = nullptr;
-
 
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
@@ -88,15 +106,26 @@ private: // メンバ変数
 	//自弾
 	int playerBulletRadius = 1;
 	//敵キャラ
-	Enemy* enemy_ = nullptr;
+	std::list<std::unique_ptr<Enemy>> enemys_;
 	int enemyRadius = 1;
 	//敵弾
+	//弾
+	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
 	int enemyBulletRadius = 1;
+	//敵発生コマンド
+	std::stringstream enemyPopCommands;
 	//Skydome
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	//レールカメラ
 	RailCamera* railCamera_ = nullptr;
+
+	//待機中フラグ
+	bool isStand_ = false;
+
+	//待機タイマー
+	int standTime_ = 0;
+
 
 	/// <summary>
 	/// ゲームシーン用

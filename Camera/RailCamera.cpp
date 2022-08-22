@@ -21,7 +21,7 @@ void RailCamera::Update(){
 	//キャラクターの移動ベクトル
 	Vector3 cameraMove = { 0, 0, 0 };
 	//キャラクターの移動の速さ
-	const float cameraSpeed = 0.1f;
+	const float cameraSpeed = 0.005f;
 
 
 	//押した方向で移動ベクトルを変更
@@ -45,19 +45,19 @@ void RailCamera::Update(){
 	}
 
 	//押した方向で移動ベクトルを変更
-	if (input_->PushKey(DIK_T)) {
+	if (input_->PushKey(DIK_H)) {
 		rotat = { 0, cameraSpeed, 0 };
 	}
-	else if (input_->PushKey(DIK_G)) {
+	else if (input_->PushKey(DIK_F)) {
 		rotat = { 0, -cameraSpeed, 0 };
 	}
-	if (input_->PushKey(DIK_F)) {
+	if (input_->PushKey(DIK_T)) {
 		rotat = { -cameraSpeed, 0, 0 };
 	}
-	else if (input_->PushKey(DIK_H)) {
+	else if (input_->PushKey(DIK_G)) {
 		rotat = { cameraSpeed, 0, 0 };
 	}
-	if (input_->PushKey(DIK_T)) {
+	if (input_->PushKey(DIK_U)) {
 		rotat = { 0, 0, -cameraSpeed };
 	}
 	else if (input_->PushKey(DIK_Y)) {
@@ -90,13 +90,11 @@ void RailCamera::Update(){
 
 }
 
-ViewProjection RailCamera::GetViewProjection()
-{
+ViewProjection RailCamera::GetViewProjection(){
 	return viewProjection_;
 }
 
-WorldTransform* RailCamera::GetworldTransform()
-{
+WorldTransform* RailCamera::GetworldTransform(){
 	return &worldTransform_;
 }
 
