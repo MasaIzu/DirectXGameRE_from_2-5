@@ -43,10 +43,15 @@ public:
 	/// <summary>
 	void OnCollision();
 
+	/// <summary>
+	/// UI描画
+	/// <summary>
+	void DrawUI();
+
 	Vector3 bVelocity(Vector3 velocity, WorldTransform& worldTransform);
 	Vector3 GetWorldPosition();
 
-	void viewSet(WorldTransform* worldTransform);
+	void worldSet(WorldTransform* worldTransform);
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
@@ -63,6 +68,12 @@ private:
 
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>>bullets_;
+
+	//3Dレティクル用ワールドトランスフォーム
+	WorldTransform worldTransform3DReticle_;
+
+	//2Dレティクル用スプライト
+	std::unique_ptr<Sprite> sprite2DReticle_;
 
 
 

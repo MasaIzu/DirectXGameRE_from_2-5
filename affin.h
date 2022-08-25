@@ -13,8 +13,11 @@ namespace AffinTrans {
 	Matrix4 Move(Vector3 move);
 	Vector3 DebugMove(Matrix4 Move);
 
+	//ベクトルと行列の掛け算(出力Vector3)
 	Vector3 MatVector(Matrix4 matrix4, Vector3 vector3);
+
 	Vector3 GetWorldTransform(Matrix4 matrix4);
+	const Vector3 AddVector3(const Vector3 v1, const Vector3 v2);
 
 	void  affin(WorldTransform& affin);
 

@@ -25,6 +25,8 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	textureHandle_ = TextureManager::Load("mario.jpg");
+	ReticleTextureHandle_ = TextureManager::Load("aim.png");
+
 	model_ = Model::Create();
 
 	//ビュープロジェクションの初期化
@@ -62,7 +64,7 @@ void GameScene::Update() {
 	viewProjection_.UpdateMatrix();
 
 	//敵キャラの更新
-	player_->viewSet(railCamera_->GetworldTransform());
+	player_->worldSet(railCamera_->GetworldTransform());
 	player_->Update();
 
 
@@ -156,7 +158,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-
+	player_->DrawUI();
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);

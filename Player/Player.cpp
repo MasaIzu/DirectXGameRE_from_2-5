@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "WinApp.h"
 using namespace MathUtility;
 
 void Player::Initialize(Model* model, uint32_t textureHandle) {
@@ -13,7 +14,18 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 1,0,20 };
+	worldTransform_.translation_ = { -7,-5,20 };
+
+	//3Dレティクルのワールドトランスフォーム初期化
+	worldTransform3DReticle_.Initialize();
+
+	//レティクル用テクスチャ取得
+	uint32_t textureReticle = TextureManager::Load("aim.png");
+	//スプライト生成
+	sprite2DReticle_.reset(Sprite::Create(textureReticle, Vector2(360, 250), Vector4(1, 1, 1, 1),Vector2(0.5, 0.5)));
+	
+	
+
 }
 
 void Player::Move() {
@@ -26,7 +38,7 @@ void Player::Move() {
 	//デスフラグの立った弾を削除
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
 		return bullet->IsDead();
-	});
+		});
 
 	//押した方向で移動ベクトルを変更
 	if (input_->PushKey(DIK_UP)) {
@@ -76,6 +88,25 @@ void Player::Move() {
 		worldTransform_.translation_.y,
 		worldTransform_.translation_.z);
 
+#pragma region //自機のワールド座標から3Dレティクルのワールド座標を計算
+
+	//自機から3Dレティクルへの距離
+	const float kDistancePlayerTo3DReticle = 10.0f;
+	//自機から3Dレティクルへのオフセット(Z+向き)
+	Vector3 offset = { 0,0,1.0f };
+	//自機のワールド座標の回転を反映
+	offset = AffinTrans::MatVector(worldTransform_.matWorld_, offset);
+	//ベクトルの長さを整える
+	offset = Vector3Normalize(offset) * kDistancePlayerTo3DReticle;
+	//3Dレティクルの座標を設定
+	worldTransform3DReticle_.translation_ = AffinTrans::AddVector3(offset,AffinTrans::GetWorldTransform(worldTransform_.matWorld_));
+
+	//行列更新
+	AffinTrans::affin(worldTransform3DReticle_);
+	worldTransform3DReticle_.TransferMatrix();
+
+#pragma endregion
+
 	//弾発射処理
 	Attack();
 
@@ -83,12 +114,23 @@ void Player::Move() {
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
 	}
+
+	POINT mousePosition;
+	//マウス座標(スクリーン座標)を取得する
+	GetCursorPos(&mousePosition);
+
+	//クライアントエリア座標に変換する
+	HWND hwnd = WinApp::GetInstance()->GetHwnd();
+	ScreenToClient(hwnd, &mousePosition);
+
+	//sprite2DReticle_->SetPosition(Vector2{ mousePosition.x, mousePosition.y });
+
 }
 
-void Player::Update(){
+void Player::Update() {
 
 	Move();
-	
+
 }
 
 void Player::Draw(ViewProjection viewProjection_) {
@@ -98,6 +140,13 @@ void Player::Draw(ViewProjection viewProjection_) {
 		bullet->Draw(viewProjection_);
 	}
 }
+
+void Player::DrawUI(){
+
+	sprite2DReticle_->Draw();
+
+}
+
 
 void Player::Attack() {
 	if (input_->PushKey(DIK_SPACE)) {
@@ -109,18 +158,21 @@ void Player::Attack() {
 		//速度ベクトルを自機の向きに合わせて回転させる
 		velocity = bVelocity(velocity, worldTransform_);
 
-		Vector3 worldVec = AffinTrans::GetWorldTransform(worldTransform_.matWorld_);
+		//自機から照準オブジェクトへのベクトル
+		velocity = AffinTrans::GetWorldTransform(worldTransform3DReticle_.matWorld_) - AffinTrans::GetWorldTransform(worldTransform_.matWorld_);
+		velocity = Vector3Normalize(velocity) * kBulletSpeed;
+
 		//弾を生成し初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(model_, worldVec, velocity);
+		newBullet->Initialize(model_, AffinTrans::GetWorldTransform(worldTransform_.matWorld_), velocity);
 
 		//弾の登録
 		bullets_.push_back(std::move(newBullet));
 	}
 }
 
-void Player::OnCollision(){
-	
+void Player::OnCollision() {
+
 }
 
 Vector3 Player::bVelocity(Vector3 velocity, WorldTransform& worldTransform) {
@@ -143,7 +195,7 @@ Vector3 Player::bVelocity(Vector3 velocity, WorldTransform& worldTransform) {
 	return result;
 }
 
-Vector3 Player::GetWorldPosition(){
+Vector3 Player::GetWorldPosition() {
 
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
@@ -155,8 +207,8 @@ Vector3 Player::GetWorldPosition(){
 	return worldPos;
 }
 
-void Player::viewSet(WorldTransform* worldTransform){
-	
+void Player::worldSet(WorldTransform* worldTransform) {
+
 	worldTransform_.parent_ = worldTransform;
 
 }

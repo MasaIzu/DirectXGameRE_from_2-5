@@ -124,7 +124,7 @@ Matrix4 AffinTrans::Move(Vector3 Move) {
 //}
 
 
-
+//ベクトルと行列の掛け算(出力Vector3)
 Vector3 AffinTrans::MatVector(Matrix4 matrix4, Vector3 vector3){
 	Vector3 matVector = { 0,0,0 };
 
@@ -143,6 +143,16 @@ Vector3 AffinTrans::GetWorldTransform(Matrix4 matrix4){
 	worldVector.z = matrix4.m[3][2];
 
 	return worldVector;
+}
+
+const Vector3 AffinTrans::AddVector3(const Vector3 v1, const Vector3 v2){
+	Vector3 V1(v1);
+
+	V1.x += v2.x;
+	V1.y += v2.y;
+	V1.z += v2.z;
+
+	return V1;
 }
 
 void AffinTrans::affin(WorldTransform& affin) {
