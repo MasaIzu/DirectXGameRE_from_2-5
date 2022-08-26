@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "WinApp.h"
+#include "MathUtility.h"
 using namespace MathUtility;
 
 void Player::Initialize(Model* model, uint32_t textureHandle) {
@@ -28,7 +29,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
 }
 
-void Player::Move() {
+void Player::Move(const ViewProjection& viewProjection) {
 
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
@@ -91,7 +92,7 @@ void Player::Move() {
 #pragma region //自機のワールド座標から3Dレティクルのワールド座標を計算
 
 	//自機から3Dレティクルへの距離
-	const float kDistancePlayerTo3DReticle = 10.0f;
+	const float kDistancePlayerTo3DReticle = 30.0f;
 	//自機から3Dレティクルへのオフセット(Z+向き)
 	Vector3 offset = { 0,0,1.0f };
 	//自機のワールド座標の回転を反映
@@ -107,6 +108,71 @@ void Player::Move() {
 
 #pragma endregion
 
+#pragma region //3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
+
+	Vector3 positionReticle = AffinTrans::GetWorldTransform(worldTransform3DReticle_.matWorld_);
+
+	Vector2 windowWH = Vector2(WinApp::GetInstance()->kWindowWidth, WinApp::GetInstance()->kWindowHeight);
+
+	//ビューポート行列
+	Matrix4 Viewport =
+	{ windowWH.x / 2,0,0,0,
+	0,-windowWH.y / 2,0,0,
+	0,0,1,0,
+	windowWH.x / 2, windowWH.y / 2,0,1 };
+
+	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4 matViewProjectionViewport = viewProjection.matView * viewProjection.matProjection * Viewport;
+
+	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+	positionReticle = AffinTrans::DivVecMat(positionReticle, matViewProjectionViewport);
+
+	//スプライトのレティクルに座標設定
+	sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+
+#pragma endregion
+
+#pragma region //3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
+	//POINT mousePosition;
+	////マウス座標(スクリーン座標)を取得する
+	//GetCursorPos(&mousePosition);
+
+	////クライアントエリア座標に変換する
+	//HWND hwnd = WinApp::GetInstance()->GetHwnd();
+	//ScreenToClient(hwnd, &mousePosition);
+
+	//sprite2DReticle_->SetPosition(Vector2( mousePosition.x, mousePosition.y ));
+
+	////ビューポート行列 (少し上にある)
+	///*Matrix4 Viewport =
+	//{ windowWH.x / 2,0,0,0,
+	//0,-windowWH.y / 2,0,0,
+	//0,0,1,0,
+	//windowWH.x / 2, windowWH.y / 2,0,1 };*/
+
+	////ビュープロジェクションビューポート合成
+	//Matrix4 matVPV = viewProjection.matView * viewProjection.matProjection * Viewport;
+
+	////合成行列の逆行列を計算する
+	//Matrix4 matInverseVPV = MathUtility::Matrix4Inverse(matVPV);
+	////スクリーン座標
+	//Vector3 posNear = Vector3(mousePosition.x, mousePosition.y, 0);
+	//Vector3 posFar = Vector3(mousePosition.x, mousePosition.y, 1);
+
+	////スクリーン座標系からワールド座標系へ
+	//posNear = AffinTrans::DivVecMat(posNear, matInverseVPV);
+	//posFar = AffinTrans::DivVecMat(posFar,matInverseVPV);
+
+	////マウスレイの方向
+	//Vector3 mouseDirection = posNear - posFar;
+	//mouseDirection = Vector3Normalize(mouseDirection);
+	////カメラから照準オブジェクトの距離
+	//const float kDistanceTestObject = 30;
+	//worldTransform3DReticle_.translation_ = 
+
+
+#pragma endregion
+
 	//弾発射処理
 	Attack();
 
@@ -115,21 +181,12 @@ void Player::Move() {
 		bullet->Update();
 	}
 
-	POINT mousePosition;
-	//マウス座標(スクリーン座標)を取得する
-	GetCursorPos(&mousePosition);
-
-	//クライアントエリア座標に変換する
-	HWND hwnd = WinApp::GetInstance()->GetHwnd();
-	ScreenToClient(hwnd, &mousePosition);
-
-	//sprite2DReticle_->SetPosition(Vector2{ mousePosition.x, mousePosition.y });
 
 }
 
-void Player::Update() {
+void Player::Update(const ViewProjection& viewProjection) {
 
-	Move();
+	Move(viewProjection);
 
 }
 
@@ -206,6 +263,8 @@ Vector3 Player::GetWorldPosition() {
 
 	return worldPos;
 }
+
+
 
 void Player::worldSet(WorldTransform* worldTransform) {
 

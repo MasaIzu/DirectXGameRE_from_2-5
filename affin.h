@@ -2,8 +2,10 @@
 
 #include <math/Matrix4.h>
 #include <math/Vector3.h>
+#include <math/Vector4.h>
 #include <3d/WorldTransform.h>
 #include "ViewProjection.h"
+#include"WinApp.h"
 
 namespace AffinTrans {
 
@@ -18,6 +20,11 @@ namespace AffinTrans {
 
 	Vector3 GetWorldTransform(Matrix4 matrix4);
 	const Vector3 AddVector3(const Vector3 v1, const Vector3 v2);
+	Vector3 DivVecMat(const Vector3& vector3, const Matrix4& matrix4);
+
+	Matrix4 setViewportMat(WorldTransform& worldTransform, WinApp* window, const Vector3& v);
+
+	Matrix4 MatrixInverse(Matrix4& pOut);
 
 	void  affin(WorldTransform& affin);
 

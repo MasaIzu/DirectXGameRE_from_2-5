@@ -21,12 +21,12 @@ public:
 	/// <summary>
 	/// 更新
 	/// <summary>
-	void Move();
+	void Move(const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 更新
 	/// <summary>
-	void Update();
+	void Update(const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画
@@ -50,7 +50,6 @@ public:
 
 	Vector3 bVelocity(Vector3 velocity, WorldTransform& worldTransform);
 	Vector3 GetWorldPosition();
-
 	void worldSet(WorldTransform* worldTransform);
 
 	//弾リストを取得

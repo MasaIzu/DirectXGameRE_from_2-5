@@ -57,7 +57,6 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	debugCamera_->Update();
-
 	//レールカメラ
 	railCamera_->Update();
 	//行列の再計算
@@ -65,7 +64,7 @@ void GameScene::Update() {
 
 	//敵キャラの更新
 	player_->worldSet(railCamera_->GetworldTransform());
-	player_->Update();
+	player_->Update(viewProjection_);
 
 
 	//敵発生コマンドー

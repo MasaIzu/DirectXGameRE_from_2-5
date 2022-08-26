@@ -98,4 +98,3 @@ WorldTransform* RailCamera::GetworldTransform(){
 	return &worldTransform_;
 }
 
-
