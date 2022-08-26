@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// <summary>
-	void Move(const ViewProjection& viewProjection);
+	void Move();
 
 	/// <summary>
 	/// 更新
@@ -47,6 +47,11 @@ public:
 	/// UI描画
 	/// <summary>
 	void DrawUI();
+
+	/// <summary>
+	/// Reticle更新
+	/// <summary>
+	void ReticleUpdate(const ViewProjection& viewProjection);
 
 	Vector3 bVelocity(Vector3 velocity, WorldTransform& worldTransform);
 	Vector3 GetWorldPosition();

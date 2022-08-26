@@ -21,7 +21,7 @@ namespace MathUtility {
 	Vector3 Vector3Cross(const Vector3& v1, const Vector3& v2);
 
 	// 2項演算子オーバーロード
-	const Vector3 operator+(const Vector3& v1, const Vector3& v2);
+	//const Vector3 operator+(const Vector3& v1, const Vector3& v2);
 	const Vector3 operator-(const Vector3& v1, const Vector3& v2);
 	const Vector3 operator*(const Vector3& v, float s);
 	const Vector3 operator*(float s, const Vector3& v);
