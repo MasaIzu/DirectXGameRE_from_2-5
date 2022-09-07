@@ -5,8 +5,6 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	assert(model);
 
 	model_ = model;
-	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("Black.png");
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
@@ -35,7 +33,7 @@ void EnemyBullet::Update() {
 	}
 }
 
-void EnemyBullet::Draw(const ViewProjection& viewProjection) {
+void EnemyBullet::Draw(const ViewProjection& viewProjection, uint32_t textureHandle_) {
 	//モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }

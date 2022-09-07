@@ -104,6 +104,17 @@ Matrix4 AffinTrans::Rotation(Vector3 rotation, int X_1_Y_2_Z_3_XYZ_6) {
 	}
 }
 
+//Vector3 Vector3::vector3Normalize(Vector3& v) {
+//	float x, y, z, w;
+//
+//	w = std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+//	x = v.x / w;
+//	y = v.y / w;
+//	z = v.z / w;
+//
+//	return Vector3(x, y, z);
+//}
+
 Matrix4 AffinTrans::Move(Vector3 Move) {
 	Matrix4 matMove = {
 		1.0f, 0.0f, 0.0f, 0.0f,
@@ -124,6 +135,18 @@ Matrix4 AffinTrans::Move(Vector3 Move) {
 //}
 
 
+Vector3 AffinTrans::vector3Normalize(const Vector3& v)
+{
+	float x, y, z, w;
+
+	w = std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	x = v.x / w;
+	y = v.y / w;
+	z = v.z / w;
+
+	return Vector3(x, y, z);
+}
+
 //ベクトルと行列の掛け算(出力Vector3)
 Vector3 AffinTrans::MatVector(Matrix4 matrix4, Vector3 vector3){
 	Vector3 matVector = { 0,0,0 };
@@ -133,6 +156,26 @@ Vector3 AffinTrans::MatVector(Matrix4 matrix4, Vector3 vector3){
 	matVector.z = vector3.x * matrix4.m[0][2] + vector3.y * matrix4.m[1][2] + vector3.z * matrix4.m[2][2];
 
 	return matVector;
+}
+
+Vector3 AffinTrans::MulVector3(Vector3 vector3, Vector3 s){
+	Vector3 M = vector3;
+
+	M.x *= s.x;
+	M.y *= s.y;
+	M.z *= s.z;
+
+	return M;
+}
+
+const Vector3 AffinTrans::SubVec(Vector3 v, Vector3 v2){
+	Vector3 V3 = v;
+
+	V3.x -= v2.x;
+	V3.y -= v2.y;
+	V3.z -= v2.z;
+
+	return V3;
 }
 
 Vector3 AffinTrans::GetWorldTransform(Matrix4 matrix4){

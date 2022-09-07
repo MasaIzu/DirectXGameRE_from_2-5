@@ -6,18 +6,21 @@
 #include <WorldTransform.h>
 #include <cassert>
 #include "affin.h"
+#include "Input.h"
+
+
 
 class PlayerBullet {
 public:
 	/// <summary>
 	///初期化
 	/// <summary>
-	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
+	void Initialize(Model* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle_, uint32_t textureHandle);
 
 	/// <summary>
 	/// 更新処理
 	/// <summary>
-	void Update();
+	void Update(const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// 描画処理
@@ -40,7 +43,11 @@ private:
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
+	uint32_t texture2Handle_ = 0u;
+	//テクスチャハンドル
+	uint32_t texture4Handle_ = 0u;
+
+	Input* input_ = nullptr;
 
 	//速度
 	Vector3 velocity_;
@@ -54,5 +61,6 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 
+	int isHit = 0;
 
 };

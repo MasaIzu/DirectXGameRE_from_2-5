@@ -14,7 +14,7 @@ public:
 
 	void Update();
 
-	void Draw(const ViewProjection& viewProjection);
+	void Draw(const ViewProjection& viewProjection, const uint32_t textureHandle_);
 
 	/// <summary>
 	/// 衝突時に呼び出すコールバック関数
@@ -30,8 +30,6 @@ private:
 	WorldTransform worldTransform_;
 	//モデル
 	Model* model_ = nullptr;
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
 
 	//速度
 	Vector3 velocity_;

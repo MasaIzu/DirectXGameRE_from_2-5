@@ -15,16 +15,16 @@ Vector3& Vector3::normalize()
     return *this;
 }
 
-Vector3 Vector3::vector3Normalize(Vector3& v) {
-    float x, y, z, w;
-
-    w = std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-    x = v.x / w;
-    y = v.y / w;
-    z = v.z / w;
-
-    return Vector3(x, y, z);
-}
+//Vector3 Vector3::vector3Normalize(Vector3& v) {
+//    float x, y, z, w;
+//
+//    w = std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+//    x = v.x / w;
+//    y = v.y / w;
+//    z = v.z / w;
+//
+//    return Vector3(x, y, z);
+//}
 
 
 float Vector3::dot(const Vector3& v) const
